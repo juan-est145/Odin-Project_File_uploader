@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node --watch ./app.js"
+    "dev": "node --watch ./app.js",
+    "migrate": "npx prisma migrate dev --name $npm_config_name"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,8 @@
   "description": "",
   "devDependencies": {
     "prisma": "^6.1.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0"
   }
 }
