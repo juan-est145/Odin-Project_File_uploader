@@ -42,7 +42,7 @@ const passportAuth = (req, res, next) => {
 		req.logIn(user, (err) => {
 			if (err)
 				return next(err);
-			return res.redirect("/");
+			return res.redirect("/storage");
 		});
 	})(req, res, next);
 };

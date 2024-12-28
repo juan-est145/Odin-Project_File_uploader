@@ -1,6 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const { passportAuth } = require("#auth/passport.js");
 const bcrypt = require("bcryptjs");
+const queries = require("#db/queries.js");
 
 const minPswdLength = 8;
 
@@ -12,7 +13,19 @@ function getSignUp(req, res) {
 	res.render("signUp");
 }
 
-const postSignIn = [
+function getLogOut(req, res, next) {
+	req.logout(async (err) => {
+		if (err)
+			return next(err);
+		await req.session.destroy((err) => {
+			if (err)
+				return next(err);
+		});
+			return res.redirect("/");
+	});
+}
+
+const postSignUp = [
 	[
 		body("username").trim()
 			.isLength({ min: 1, max: 255 }).withMessage("Invalid username or password"),
@@ -28,16 +41,17 @@ const postSignIn = [
 	async function signUp(req, res, next) {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			//Might need to use later req.flash
+			// Might need to use later req.flash
 			return res.status(400).redirect("/sign-up")
 		}
 		try {
 			const hash = await bcrypt.hash(req.body.password, 10);
-			// Implement sign up function
+			await queries.postUser({ username: req.body.username, password: hash })
 			return passportAuth(req, res, next);
 		} catch (error) {
 			console.error(error);
-			//Implement sign up error handle
+			next(error);
+			// Implement sign up error handle
 		}
 	}
 ];
@@ -67,6 +81,7 @@ const postLogIn = [
 module.exports = {
 	getIndex,
 	getSignUp,
-	postSignIn,
+	getLogOut,
+	postSignUp,
 	postLogIn,
 };

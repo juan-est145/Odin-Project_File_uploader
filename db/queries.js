@@ -9,6 +9,18 @@ async function getUser(conditions) {
 	}
 }
 
+async function postUser(conditions) {
+	try {
+		const user = await prisma.user.create({
+			data: conditions,
+		});
+		return (user);
+	} catch (error) {
+		throw error;
+	}
+}
+
 module.exports = {
 	getUser,
+	postUser,
 }
