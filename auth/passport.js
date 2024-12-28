@@ -20,3 +20,34 @@ const strategy = new LocalStrategy((customFields, async (username, password, don
 		return done(error);
 	}
 }));
+
+passport.use(strategy);
+passport.serializeUser((user, done) => {
+	done(null, user.id);
+});
+passport.deserializeUser(async (id, done) => {
+	try {
+		done(null, await queries.getUser({id: id}));
+	} catch (error) {
+		done(error);
+	}
+});
+const passportConf = passport.session();
+const passportAuth = (req, res, next) => {
+	passport.authenticate("local", (err, user, info) => {
+		if (err)
+			return next(err);
+		if (!user)
+			return res.redirect("/");
+		req.logIn(user, (err) => {
+			if (err)
+				return next(err);
+			return res.redirect("/");
+		});
+	})(req, res, next);
+};
+
+module.exports = {
+	passportConf,
+	passportAuth,
+};

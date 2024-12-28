@@ -1,13 +1,17 @@
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
-const { testCont } = require("#controllers/test.js")
 const { sessionConfig } = require("#auth/sessionConfig.js");
+const indexRouter = require("#routes/indexRouter.js");
 
 const app = express();
+app.set("views", __dirname + "/views");
+app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(sessionConfig);
 
-app.use("/", testCont);
+app.use("/", indexRouter);
+
 app.use((req, res) => {
 	res.status(404).send("404: Page not found");
 });
