@@ -3,16 +3,17 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Drive</title>
+	<title>Document</title>
 </head>
 <body>
-	<form action="/", method="post">
+	<form action="/log-in", method="post">
 		<label for="username">Username</label>
 		<input id="username" name="username" placeholder="Username" type="text" required/>
 		<label for="password">Password</label>
 		<input id="password" name="password" type="password" required/>
-		<button>Log in</button>
-		<span>Not registered? Sign up <a href="/sign-up">here</a></span>
+		<label for="repeatPassword">Repeat password</label>
+		<input id="repeatPassword" name="repeatPassword" type="password" required/>
+		<button>Register</button>
 	</form>
 </body>
 </html>
