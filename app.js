@@ -9,6 +9,7 @@ const storageRouter = require("#routes/storage.js");
 const app = express();
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(sessionConfig);
 app.use(passportConf);
