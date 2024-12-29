@@ -53,11 +53,11 @@ const postSignUp = [
 			await queries.postUser({ username: req.body.username, password: hash })
 			return passportAuth(req, res, next);
 		} catch (error) {
-			console.error(error);
 			if (error.code === "P2002") {
 				req.flash("valErrors", [{msg: "Username already exists"}]);
 				return res.status(400).redirect("/sign-up");
 			}
+			console.error(error);
 			next(error);
 		}
 	}
