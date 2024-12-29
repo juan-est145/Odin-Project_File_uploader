@@ -1,0 +1,81 @@
+html {
+	--black: hsl(240 5.1% 15%);
+	--eerieBlack: #28231c;
+	--roseEbony: #513b3c;
+	--wenge: #655356;
+	--borderRadius: 10px;
+	--lightBlue: #c1eeff;
+	color: white;
+	font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+::selection {
+	background-color: pink;
+	color: black;
+}
+
+body {
+	background-color: var(--black);
+	min-height: 100vh;
+	margin: 0px;
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	text-decoration: none;
+	padding: 0.4em;
+	border-bottom: thin solid var(--roseEbony);
+}
+
+.header>* {
+	color: white;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	flex-grow: 1;
+}
+
+.logInForm {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	font-size: 1.3rem;
+}
+
+.logInForm input {
+	color: white;
+	font-size: 1.1rem;
+	background-color: var(--eerieBlack);
+	border: thin solid var(--roseEbony);
+	border-radius: var(--borderRadius);
+	padding: 0.6em;
+}
+
+.logInForm a {
+	color: var(--lightBlue);
+}
+
+.mainBtn {
+	background-color: var(--wenge);
+	border: none;
+	cursor: pointer;
+	color: white;
+	border-radius: var(--borderRadius);
+	padding: 0.4em;
+	font-size: 1.2rem;
+}
+
+.mainBtn:focus {
+	background-color: pink;
+}

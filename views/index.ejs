@@ -2,13 +2,16 @@
 <html lang="en">
 	<%- include("partials/headTag", {title: "Odin storage", style: "style"}) %>
 <body>
-	<form action="/", method="post">
-		<label for="username">Username</label>
-		<input id="username" name="username" placeholder="Username" type="text" required/>
-		<label for="password">Password</label>
-		<input id="password" name="password" type="password" required/>
-		<button>Log in</button>
-		<span>Not registered? Sign up <a href="/sign-up">here</a></span>
-	</form>
+<%- include("partials/header") %>
+	<main>
+		<form action="/", method="post" class="logInForm">
+			<label for="username">Username</label>
+			<input id="username" name="username" placeholder="Username" type="text" required/>
+			<label for="password">Password</label>
+			<input id="password" name="password" type="password" required/>
+			<button class="mainBtn">Log in</button>
+			<span>Not registered? Sign up <a href="/sign-up">here</a></span>
+		</form>
+	</main>
 </body>
 </html>
