@@ -79,3 +79,11 @@ main {
 .mainBtn:focus {
 	background-color: pink;
 }
+
+.errorList {
+	list-style: none;
+	color: var(--lightBlue);
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}

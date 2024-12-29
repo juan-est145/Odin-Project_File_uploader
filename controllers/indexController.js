@@ -6,10 +6,14 @@ const queries = require("#db/queries.js");
 const minPswdLength = 8;
 
 function getIndex(req, res) {
+	if (req.isAuthenticated())
+		return (res.redirect("/storage"));
 	res.render("index");
 }
 
 function getSignUp(req, res) {
+	if (req.isAuthenticated())
+		return (res.redirect("/storage"));
 	res.render("signUp");
 }
 
@@ -28,9 +32,9 @@ function getLogOut(req, res, next) {
 const postSignUp = [
 	[
 		body("username").trim()
-			.isLength({ min: 1, max: 255 }).withMessage("Invalid username or password"),
+			.isLength({ min: 1, max: 255 }).withMessage("Username must have between 1 and 255 characters"),
 		body("password").trim()
-			.isLength({ min: minPswdLength, max: 255 }).withMessage("Invalid username or password"),
+			.isLength({ min: minPswdLength, max: 255 }).withMessage("Password must have between 8 and 255 characters"),
 		body("repeatPassword").trim()
 			.custom((value, { req }) => {
 				if (value !== req.body.password)
@@ -41,8 +45,8 @@ const postSignUp = [
 	async function signUp(req, res, next) {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			// Might need to use later req.flash
-			return res.status(400).redirect("/sign-up")
+			req.flash("valErrors", errors.array());
+			return res.status(400).redirect("/sign-up");
 		}
 		try {
 			const hash = await bcrypt.hash(req.body.password, 10);
@@ -50,8 +54,11 @@ const postSignUp = [
 			return passportAuth(req, res, next);
 		} catch (error) {
 			console.error(error);
+			if (error.code === "P2002") {
+				req.flash("valErrors", [{msg: "Username already exists"}]);
+				return res.status(400).redirect("/sign-up");
+			}
 			next(error);
-			// Implement sign up error handle
 		}
 	}
 ];
@@ -67,7 +74,7 @@ const postLogIn = [
 		try {
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
-				// Might need to use later req.flash
+				req.flash("valErrors", errors.array()[0]);
 				return res.status(400).redirect("/");
 			}
 			return passportAuth(req, res, next);

@@ -5,6 +5,7 @@
 <%- include("partials/header") %>
 	<main>
 		<form action="/", method="post" class="accountForm">
+			<%- include("partials/errors") %>
 			<label for="username">Username</label>
 			<input id="username" name="username" placeholder="Username" type="text" required/>
 			<label for="password">Password</label>

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("partials/headTag", {title: "Sign up", style: "style"}) %>
+<%- include("partials/headTag", { title: "Sign up", style: "style" }) %>
 <body>
 <%- include("partials/header") %>
 	<main>
 		<form action="/sign-up", method="post" class="accountForm">
+			<%- include("partials/errors") %>
 			<label for="username">Username</label>
 			<input id="username" name="username" placeholder="Username" type="text" required/>
 			<label for="password">Password</label>
