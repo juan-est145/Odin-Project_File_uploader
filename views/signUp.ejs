@@ -2,14 +2,17 @@
 <html lang="en">
 <%- include("partials/headTag", {title: "Sign up", style: "style"}) %>
 <body>
-	<form action="/sign-up", method="post">
-		<label for="username">Username</label>
-		<input id="username" name="username" placeholder="Username" type="text" required/>
-		<label for="password">Password</label>
-		<input id="password" name="password" type="password" required/>
-		<label for="repeatPassword">Repeat password</label>
-		<input id="repeatPassword" name="repeatPassword" type="password" required/>
-		<button>Register</button>
-	</form>
+<%- include("partials/header") %>
+	<main>
+		<form action="/sign-up", method="post" class="accountForm">
+			<label for="username">Username</label>
+			<input id="username" name="username" placeholder="Username" type="text" required/>
+			<label for="password">Password</label>
+			<input id="password" name="password" type="password" required/>
+			<label for="repeatPassword">Repeat password</label>
+			<input id="repeatPassword" name="repeatPassword" type="password" required/>
+			<button class="mainBtn">Register</button>
+		</form>
+	</main>
 </body>
 </html>

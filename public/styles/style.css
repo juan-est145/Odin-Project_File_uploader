@@ -43,7 +43,7 @@ main {
 	flex-grow: 1;
 }
 
-.logInForm {
+.accountForm {
 	display: flex;
 	flex-grow: 1;
 	flex-direction: column;
@@ -53,7 +53,7 @@ main {
 	font-size: 1.3rem;
 }
 
-.logInForm input {
+.accountForm  input {
 	color: white;
 	font-size: 1.1rem;
 	background-color: var(--eerieBlack);
@@ -62,7 +62,7 @@ main {
 	padding: 0.6em;
 }
 
-.logInForm a {
+.accountForm  a {
 	color: var(--lightBlue);
 }
 
