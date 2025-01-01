@@ -3,7 +3,7 @@ function getStorage(req, res) {
 }
 
 function postStorage(req, res, next) {
-	
+	return res.redirect("/storage");
 }
 
 
