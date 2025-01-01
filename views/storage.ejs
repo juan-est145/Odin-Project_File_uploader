@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("partials/headTag", {title: "Odin storage", style: "style"}) %>
+<%- include("partials/headTag", {title: "Odin storage", style: "storage"}) %>
 <body>
+	<%- include("partials/header") %>
 	<h1>You are logged in</h1>
 	<a href="/log-out">Log out (temporal)</a>
+	<form action="/storage", method="post" enctype="multipart/form-data" class="accountForm">
+		<label for="file">Enter your file</label>
+		<input id="file" name="file" type="file" required/>
+		<button class="mainBtn">Submit</button>
+	</form>
 </body>
 </html>

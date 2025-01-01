@@ -1,4 +1,7 @@
 const { Router } = require("express");
+const controllers = require("#controllers/storageController.js");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/"});
 
 const storageRouter = Router();
 
@@ -10,10 +13,7 @@ storageRouter.use((req, res, next) => {
 });
 
 
-storageRouter.get("/", (req, res, next) => {
-	if (!req.isAuthenticated())
-		return res.send("You are not logged in");
-	return res.render("storage");
-});
+storageRouter.get("/", controllers.getStorage);
+storageRouter.post("/", upload.single("file"), controllers.postStorage);
 
 module.exports = storageRouter;

@@ -7,7 +7,7 @@ const flash = require("connect-flash");
 const { sessionConfig } = require("#auth/sessionConfig.js");
 const { passportConf } = require("#auth/passport.js");
 const indexRouter = require("#routes/indexRouter.js");
-const storageRouter = require("#routes/storage.js");
+const storageRouter = require("#routes/storageRouter.js");
 
 const app = express();
 app.set("views", __dirname + "/views");
