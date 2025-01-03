@@ -92,7 +92,6 @@ async function registerFile(file, user, folderId) {
 	
 }
 
-// TO DO: Delete this functions and implement them directly in index controller with prisma directly. Also create root folder when creating user
 
 module.exports = {
 	getUser,
