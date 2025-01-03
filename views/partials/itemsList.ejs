@@ -1,0 +1,13 @@
+<% if (!items || items.length <= 0) { %>
+	<h1>This folder seems to be empty for now</h1>
+<% } else { %>
+	<ul>
+		<% items.forEach(element => { %>
+		<li>
+			<a href="#"><%= `${element.name} is ${element.hasOwnProperty("folderId")? "file": "folder"}` %></a>
+		</li>
+		<% }); %>
+	</ul>
+<% } %>
+ 
+

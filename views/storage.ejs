@@ -5,13 +5,7 @@
 	<script src="uploads.js" defer></script>
 	<%- include("partials/header") %>
 	<%- include("partials/navBar") %>
-	<ul>
-		<% items.forEach(element => { %>
-		<li>
-			<a href="#"><%= `${element.name} is ${element.hasOwnProperty("folderId")? "file": "folder"}` %></a>
-		</li>
-		<% }); %>
-	</ul>
+	<%- include("partials/itemsList") %>
 	<%- include("partials/uploadsForm", { route: childFolder }) %>
 </body>
 </html>
