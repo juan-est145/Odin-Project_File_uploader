@@ -3,8 +3,7 @@
 <%- include("partials/headTag", {title: "Odin storage", style: "storage"}) %>
 <body>
 	<%- include("partials/header") %>
-	<h1>You are logged in</h1>
-	<a href="/log-out">Log out (temporal)</a>
+	<%- include("partials/navBar") %>
 	<form action="/storage", method="post" enctype="multipart/form-data" class="accountForm">
 		<label for="file">Enter your file</label>
 		<input id="file" name="file" type="file" required/>

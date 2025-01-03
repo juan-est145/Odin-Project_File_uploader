@@ -1,1 +1,14 @@
 @import url("style.css");
+
+.navBar {
+	display: flex;
+	justify-content: space-between;
+	border-bottom: thin solid var(--roseEbony);
+}
+
+.navigation {
+	display: flex;
+	padding: 0px;
+	gap: 2px;
+	list-style-type: none;
+}
