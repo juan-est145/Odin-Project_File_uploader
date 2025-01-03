@@ -9,6 +9,7 @@ async function getUser(conditions) {
 	}
 }
 
+//TO DO: Create home/root folder along with the new user
 async function postUser(conditions) {
 	try {
 		const user = await prisma.user.create({
@@ -76,6 +77,21 @@ async function getAllChild(folder) {
 	}
 }
 
+async function registerFile(file, user, folderId) {
+	try {
+		await prisma.file.create({
+			data: {
+				name: file.originalname,
+				userId: user.id,
+				folderId,
+			}
+		});
+	} catch (error) {
+		throw (error);
+	}
+	
+}
+
 // TO DO: Delete this functions and implement them directly in index controller with prisma directly. Also create root folder when creating user
 
 module.exports = {
@@ -83,4 +99,5 @@ module.exports = {
 	postUser,
 	getFolderId,
 	getAllChild,
+	registerFile,
 }

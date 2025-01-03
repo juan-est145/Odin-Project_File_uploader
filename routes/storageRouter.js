@@ -11,8 +11,8 @@ storageRouter.use((req, res, next) => {
 	//Later implement a view for not logged users
 });
 
-
 storageRouter.get("/(:id)?", controllers.getStorage);
-storageRouter.post("/", upload.single("file"), controllers.postStorage);
+//Make extensive tests with the id param to make sure that the regex is correct
+storageRouter.post("/(:id/)?uploadFile", upload.single("file"), controllers.postStorage);
 
 module.exports = storageRouter;
