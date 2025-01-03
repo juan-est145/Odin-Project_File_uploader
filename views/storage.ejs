@@ -4,6 +4,12 @@
 <body>
 	<%- include("partials/header") %>
 	<%- include("partials/navBar") %>
-	
+	<ul>
+		<% items.forEach(element => { %>
+		<li>
+			<a href="#"><%= `${element.name} is ${element.hasOwnProperty("folderId")? "file": "folder"}` %></a>
+		</li>
+		<% }); %>
+	</ul>
 </body>
 </html>

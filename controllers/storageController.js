@@ -6,7 +6,8 @@ async function getStorage(req, res, next) {
 		const parentFolder = await queries.getFolderId(folderId, req.user.id);
 		const result = await queries.getAllChild(parentFolder);
 		console.log(result);
-		return res.render("storage");
+		const items = [...result.folders, ...result.files].sort((a, b) => a.name > b.name);
+		return res.render("storage", { items: items });
 	} catch (error) {
 		console.error(error);
 		next(error);
