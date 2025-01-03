@@ -2,6 +2,7 @@
 <html lang="en">
 <%- include("partials/headTag", {title: "Odin storage", style: "storage"}) %>
 <body>
+	<script src="uploads.js" defer></script>
 	<%- include("partials/header") %>
 	<%- include("partials/navBar") %>
 	<ul>
@@ -11,5 +12,6 @@
 		</li>
 		<% }); %>
 	</ul>
+	<%- include("partials/uploadsForm", { route: childFolder }) %>
 </body>
 </html>

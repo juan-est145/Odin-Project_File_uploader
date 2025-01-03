@@ -7,12 +7,11 @@ async function getStorage(req, res, next) {
 		const result = await queries.getAllChild(parentFolder);
 		console.log(result);
 		const items = [...result.folders, ...result.files].sort((a, b) => a.name > b.name);
-		return res.render("storage", { items: items });
+		return res.render("storage", { items: items,  childFolder: parentFolder.parentId === null? null: parentFolder.id });
 	} catch (error) {
 		console.error(error);
 		next(error);
 	}
-
 }
 
 function postStorage(req, res, next) {

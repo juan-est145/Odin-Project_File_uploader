@@ -1,5 +1,15 @@
-<form action="/storage", method="post" enctype="multipart/form-data" class="accountForm">
-	<label for="file">Enter your file</label>
-	<input id="file" name="file" type="file" required/>
-	<button class="mainBtn">Submit</button>
-</form>
+<dialog id="uploadFileModal">
+	<form action=<%= route? `/storage/${route}/uploadFile`: "/storage/uploadFile" %> method="post" enctype="multipart/form-data" class="accountForm">
+		<label for="file">Enter your file</label>
+		<input id="file" name="file" type="file" required/>
+		<button class="mainBtn">Submit</button>
+	</form>
+</dialog>
+
+<dialog id="uploadFolderModal">
+	<form action=<%= route? `/storage/${route}/uploadFolder`: "/storage/uploadFolder" %>, method="post" enctype="multipart/form-data" class="accountForm">
+		<label for="folder">Name your folder</label>
+		<input id="folder" name="folder" type="text" required/>
+		<button class="mainBtn">Submit</button>
+	</form>
+</dialog>
