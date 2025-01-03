@@ -12,7 +12,7 @@ storageRouter.use((req, res, next) => {
 });
 
 
-storageRouter.get("/", controllers.getStorage);
+storageRouter.get("/(:id)?", controllers.getStorage);
 storageRouter.post("/", upload.single("file"), controllers.postStorage);
 
 module.exports = storageRouter;
