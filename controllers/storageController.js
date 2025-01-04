@@ -1,4 +1,5 @@
 const queries = require("#db/queries.js");
+const { mkdir } = require("node:fs/promises");
 const { body, validationResult } = require("express-validator");
 
 async function getStorage(req, res, next) {
@@ -6,7 +7,6 @@ async function getStorage(req, res, next) {
 	try {
 		const parentFolder = await queries.getFolderId(folderId, req.user.id);
 		const result = await queries.getAllChild(parentFolder);
-		console.log(result);
 		const items = [...result.folders, ...result.files].sort((a, b) => a.name.localeCompare(b.name));
 		return res.render("storage", { items: items, childFolder: parentFolder.parentId === null ? null : parentFolder.id });
 	} catch (error) {
@@ -32,15 +32,28 @@ const postFolder = [
 			return console.log("There is an error");
 		}
 		try {
+			// TO DO: Check for repeated folder names with the same parent folderId.
 			const parentFolder = await queries.getFolderId(req.params.id, req.user.id);
-			await queries.postFolder(req.body.folder, parentFolder.id, req.user.id);
-			let path = req.params.id ? `/storage/${req.params.id}` : "/storage";
-			return res.redirect(path);
+			res.locals.newFolder = await queries.postFolder(req.body.folder, parentFolder.id, req.user.id);
+			next();
 		} catch (error) {
 			console.error(error);
 			next(error);
 		}
-
+	},
+	async function createFolderInStorage(req, res, next) {
+		try {
+			const folders = await queries.getAllParentFolders(res.locals.newFolder);
+			let uploadPath = `./uploads/${req.user.id}`;
+			for (let i = folders.length - 1; i > -1; i--) 
+				uploadPath += `/${folders[i].name}`;
+			await mkdir(uploadPath, { recursive: true });
+			let redirectPath = req.params.id ? `/storage/${req.params.id}` : "/storage";
+			return res.redirect(redirectPath);
+		} catch (error) {
+			// Delete the folder from the database if there is an error creating the folder
+			next(error);
+		}
 	}
 ]
 

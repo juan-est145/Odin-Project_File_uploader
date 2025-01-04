@@ -2,7 +2,6 @@ const { mkdir } = require("node:fs/promises");
 const multer = require("multer");
 const query = require("#db/queries.js");
 
-const homeFolder = "home";
 const storage = multer.diskStorage({
 	destination: async function (req, file, cb) {
 		// TO DO: When folders are operational, the variable below must contain the entire tree of folders
@@ -18,7 +17,7 @@ const storage = multer.diskStorage({
 		}
 	},
 	filename: function (req, file, cb) {
-		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+		const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
 		cb(null, `${uniqueSuffix}-${file.originalname}`);
 	}
 });

@@ -89,18 +89,38 @@ async function postFile(file, user, folderId) {
 	} catch (error) {
 		throw (error);
 	}
-	
+
 }
 
 async function postFolder(name, parentId, userId) {
 	try {
-		await prisma.folder.create({
+		const result = await prisma.folder.create({
 			data: {
 				name,
 				parentId,
 				userId
 			}
-		})
+		});
+		return (result);
+	} catch (error) {
+		throw error;
+	}
+}
+
+async function getAllParentFolders(folder) {
+	try {
+		const folders = [];
+		folders.push(folder);
+		do {
+			let result = await prisma.folder.findUnique({
+				where: {
+					id: folders[folders.length - 1].parentId
+				}
+			});
+			if (result)
+				folders.push(result);
+		} while (folders[folders.length - 1].parentId);
+		return (folders);
 	} catch (error) {
 		throw error;
 	}
@@ -114,4 +134,5 @@ module.exports = {
 	getAllChild,
 	postFile,
 	postFolder,
+	getAllParentFolders,
 }
