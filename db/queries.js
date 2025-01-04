@@ -9,15 +9,33 @@ async function getUser(conditions) {
 	}
 }
 
-//TO DO: Create home/root folder along with the new user
-async function postUser(conditions) {
+async function postUser(username, password) {
 	try {
 		const user = await prisma.user.create({
-			data: conditions,
+			data: {
+				username,
+				password,
+			},
+		});
+		await prisma.folder.create({
+			data: {
+				name: "home",
+				userId: user.id,
+				parentId: null
+			}
 		});
 		return (user);
-	} catch (error) {
-		throw error;
+	} catch (folderError) {
+		try {
+			await prisma.user.delete({
+				where: {
+					username
+				}
+			});
+			throw folderError;
+		} catch (error) {
+			throw error;
+		}
 	}
 }
 

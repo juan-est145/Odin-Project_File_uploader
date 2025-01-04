@@ -2,6 +2,7 @@ const { body, validationResult } = require("express-validator");
 const { passportAuth } = require("#auth/passport.js");
 const bcrypt = require("bcryptjs");
 const queries = require("#db/queries.js");
+const { mkdir } = require("node:fs/promises");
 
 const minPswdLength = 8;
 
@@ -50,7 +51,8 @@ const postSignUp = [
 		}
 		try {
 			const hash = await bcrypt.hash(req.body.password, 10);
-			await queries.postUser({ username: req.body.username, password: hash })
+			const user = await queries.postUser(req.body.username, hash);
+			await mkdir(`./uploads/${user.id}/home`, { recursive: true });
 			return passportAuth(req, res, next);
 		} catch (error) {
 			if (error.code === "P2002") {
