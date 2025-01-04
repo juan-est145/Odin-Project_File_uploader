@@ -13,6 +13,7 @@ storageRouter.use((req, res, next) => {
 
 storageRouter.get("/(:id)?", controllers.getStorage);
 //Make extensive tests with the id param to make sure that the regex is correct
-storageRouter.post("/(:id/)?uploadFile", upload.single("file"), controllers.postStorage);
+storageRouter.post("/(:id/)?uploadFile", upload.single("file"), controllers.postFile);
+storageRouter.post("/(:id/)?uploadFolder", controllers.postFolder);
 
 module.exports = storageRouter;

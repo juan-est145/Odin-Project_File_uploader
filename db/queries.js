@@ -21,12 +21,12 @@ async function postUser(conditions) {
 	}
 }
 
-async function getFolderId(folderId, user) {
+async function getFolderId(folderId, userId) {
 	try {
 		const folder = await prisma.folder.findFirst({
 			where: {
 				userId: {
-					equals: user
+					equals: userId
 				},
 				AND: {
 					id: {
@@ -40,7 +40,7 @@ async function getFolderId(folderId, user) {
 		const home = await prisma.folder.findFirstOrThrow({
 			where: {
 				userId: {
-					equals: user
+					equals: userId
 				},
 				AND: {
 					parentId: {
@@ -77,7 +77,7 @@ async function getAllChild(folder) {
 	}
 }
 
-async function registerFile(file, user, folderId) {
+async function postFile(file, user, folderId) {
 	try {
 		await prisma.file.create({
 			data: {
@@ -92,11 +92,26 @@ async function registerFile(file, user, folderId) {
 	
 }
 
+async function postFolder(name, parentId, userId) {
+	try {
+		await prisma.folder.create({
+			data: {
+				name,
+				parentId,
+				userId
+			}
+		})
+	} catch (error) {
+		throw error;
+	}
+}
+
 
 module.exports = {
 	getUser,
 	postUser,
 	getFolderId,
 	getAllChild,
-	registerFile,
+	postFile,
+	postFolder,
 }

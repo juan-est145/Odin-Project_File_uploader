@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
 		const route = `./uploads/${req.user.id}${pathOfFolderIds}`;
 		try {
 			let folderId = req.params.id.id
-			await query.registerFile(file, req.user, folderId);
+			await query.postFile(file, req.user, folderId);
 			await mkdir(route, { recursive: true });
 			cb(null, route);
 		} catch (error) {
