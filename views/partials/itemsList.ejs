@@ -1,7 +1,7 @@
 <% if (!items || items.length <= 0) { %>
 	<h1>This folder seems to be empty for now</h1>
 <% } else { %>
-	<ul>
+	<ul class="storageDisplay">
 		<% items.forEach(element => { %>
 		<li>
 			<% if (element.hasOwnProperty("folderId")) { %>

@@ -4,6 +4,16 @@
 	display: flex;
 	justify-content: space-between;
 	border-bottom: thin solid var(--roseEbony);
+	align-items: center;
+}
+
+.navBar a {
+	color: white;
+	text-decoration: none;
+}
+
+.navBar a:hover {
+	text-decoration: underline;
 }
 
 .navigation {
@@ -19,4 +29,13 @@
 
 .icon {
 	width: 15px;
+}
+
+.storageDisplay a {
+	color: white;
+	text-decoration: none;
+}
+
+.storageDisplay a:hover {
+	text-decoration: underline;
 }
