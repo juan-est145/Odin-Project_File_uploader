@@ -7,6 +7,7 @@
 </dialog>
 
 <dialog id="uploadFolderModal">
+	<%- include("errors") %>
 	<form action=<%= route? `/storage/${route}/uploadFolder`: "/storage/uploadFolder" %> method="post" class="accountForm">
 		<label for="folder">Name your folder</label>
 		<input id="folder" name="folder" type="text" required/>

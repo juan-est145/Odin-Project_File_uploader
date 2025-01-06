@@ -29,6 +29,7 @@ app.use(helmet({
 
 app.use((req, res, next) => {
 	res.locals.currentUser = req.user;
+	res.locals.valErrors = req.flash("valErrors");
 	next();
 });
 app.use("/", indexRouter);

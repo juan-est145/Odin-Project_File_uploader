@@ -28,8 +28,10 @@ const postFolder = [
 	async function postFolder(req, res, next) {
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
-			// Need to handle validation errors, probably use req.flash
-			return console.log("There is an error");
+			req.flash("valErrors", errors.array());
+			const returnPath = req.originalUrl.split("/");
+			returnPath.pop();
+			return res.status(400).redirect(returnPath.join("/"));
 		}
 		try {
 			// TO DO: Check for repeated folder names with the same parent folderId.
