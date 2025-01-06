@@ -2,7 +2,7 @@ const { mkdir } = require("node:fs/promises");
 const multer = require("multer");
 const query = require("#db/queries.js");
 
-// Need to implement a check for files that have the same name in the same folder 
+// TO DO: Need to implement a check for files that have the same name in the same folder 
 const storage = multer.diskStorage({
 	destination: async function (req, file, cb) {
 		try {

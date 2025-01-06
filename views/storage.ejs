@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include("partials/headTag", {title: "Odin storage", style: "storage"}) %>
+<%- include("partials/headTag", { title: "Odin storage", style: "storage" }) %>
 <body>
 	<script src="/uploads.js" defer></script>
 	<%- include("partials/header") %>
-	<%- include("partials/navBar") %>
+	<%- include("partials/navBar", { navBar }) %>
 	<%- include("partials/itemsList") %>
 	<%- include("partials/errors") %>
 	<%- include("partials/uploadsForm", { route: childFolder }) %>

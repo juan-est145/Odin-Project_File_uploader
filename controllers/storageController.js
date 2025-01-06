@@ -8,7 +8,12 @@ async function getStorage(req, res, next) {
 		const parentFolder = await queries.getFolderId(folderId, req.user.id);
 		const result = await queries.getAllChild(parentFolder);
 		const items = [...result.folders, ...result.files].sort((a, b) => a.name.localeCompare(b.name));
-		return res.render("storage", { items: items, childFolder: parentFolder.parentId === null ? null : parentFolder.id });
+		const routeTree = await queries.getAllParentFolders(parentFolder);
+		return res.render("storage", { 
+			items: items, 
+			childFolder: parentFolder.parentId === null ? null : parentFolder.id,
+			navBar: routeTree,
+		 });
 	} catch (error) {
 		console.error(error);
 		next(error);
