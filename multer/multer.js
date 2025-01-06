@@ -2,7 +2,6 @@ const { mkdir } = require("node:fs/promises");
 const multer = require("multer");
 const query = require("#db/queries.js");
 
-// TO DO: Need to implement a check for files that have the same name in the same folder 
 const storage = multer.diskStorage({
 	destination: async function (req, file, cb) {
 		try {
@@ -10,7 +9,7 @@ const storage = multer.diskStorage({
 			let uploadPath = `./uploads/${req.user.id}`;
 			for (let i = folders.length - 1; i > -1; i--)
 				uploadPath += `/${folders[i].name}`;
-			let folderId = req.params.id.id
+			let folderId = req.params.id.id;
 			await query.postFile(file, req.user, folderId);
 			await mkdir(uploadPath, { recursive: true });
 			cb(null, uploadPath);
@@ -26,8 +25,10 @@ const storage = multer.diskStorage({
 
 function filter(req, file, cb) {
 	const promise = req.params.id ? query.getFolderId(req.params.id, req.user.id) : query.getFolderId("storage", req.user.id);
-	promise.then((value) => {
+	promise.then(async (value) => {
 		if (!value)
+			return cb(null, false);
+		if (await query.isFileRepeated(file.originalname, value.id, req.user.id))
 			return cb(null, false);
 		req.params.id = value;
 		return cb(null, true);
