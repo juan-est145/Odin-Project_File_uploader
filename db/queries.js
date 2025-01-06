@@ -15,27 +15,17 @@ async function postUser(username, password) {
 			data: {
 				username,
 				password,
+				folders: {
+					create: {
+						name: "home",
+						parentId: null,
+					}
+				}
 			},
 		});
-		await prisma.folder.create({
-			data: {
-				name: "home",
-				userId: user.id,
-				parentId: null
-			}
-		});
 		return (user);
-	} catch (folderError) {
-		try {
-			await prisma.user.delete({
-				where: {
-					username
-				}
-			});
-			throw folderError;
-		} catch (error) {
-			throw error;
-		}
+	} catch (error) {
+		throw error;
 	}
 }
 
