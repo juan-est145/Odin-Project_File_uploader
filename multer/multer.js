@@ -4,14 +4,15 @@ const query = require("#db/queries.js");
 
 const storage = multer.diskStorage({
 	destination: async function (req, file, cb) {
-		// TO DO: When folders are operational, the variable below must contain the entire tree of folders
-		let pathOfFolderIds = "/home";
-		const route = `./uploads/${req.user.id}${pathOfFolderIds}`;
 		try {
+			const folders = await query.getAllParentFolders(req.params.id);
+			let uploadPath = `./uploads/${req.user.id}`;
+			for (let i = folders.length - 1; i > -1; i--)
+				uploadPath += `/${folders[i].name}`;
 			let folderId = req.params.id.id
 			await query.postFile(file, req.user, folderId);
-			await mkdir(route, { recursive: true });
-			cb(null, route);
+			await mkdir(uploadPath, { recursive: true });
+			cb(null, uploadPath);
 		} catch (error) {
 			cb(error);
 		}
@@ -22,20 +23,18 @@ const storage = multer.diskStorage({
 	}
 });
 
-//TO DO: This later shoudl check that the folder id route is correct and belongs to the user
+//TO DO: This later should check that the folder id route is correct and belongs to the user
 function filter(req, file, cb) {
-	if (!req.params.id) {
-		const promise = query.getFolderId("storage", req.user.id);
-		promise.then((value) => {
-			req.params.id = value;
-			cb(null, true);
-		}).catch((error) => {
-			console.error(error);
-			cb(error);
-		});
-	} else {
+	if (req.params.id)
+		return cb(null, true);
+	const promise = query.getFolderId("storage", req.user.id);
+	promise.then((value) => {
+		req.params.id = value;
 		cb(null, true);
-	}
+	}).catch((error) => {
+		console.error(error);
+		cb(error);
+	});
 }
 
 const upload = multer({ storage: storage, fileFilter: filter, });

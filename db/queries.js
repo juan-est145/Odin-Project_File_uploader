@@ -77,7 +77,7 @@ async function findRepeatedFolder(name, parentId) {
 	try {
 		const result = prisma.folder.findFirst({
 			where: {
-				name : {
+				name: {
 					equals: name
 				},
 				AND: {
@@ -161,7 +161,7 @@ async function getAllParentFolders(folder) {
 	try {
 		const folders = [];
 		folders.push(folder);
-		do {
+		while (folders[folders.length - 1].parentId) {
 			let result = await prisma.folder.findUnique({
 				where: {
 					id: folders[folders.length - 1].parentId
@@ -169,7 +169,7 @@ async function getAllParentFolders(folder) {
 			});
 			if (result)
 				folders.push(result);
-		} while (folders[folders.length - 1].parentId);
+		}
 		return (folders);
 	} catch (error) {
 		throw error;
