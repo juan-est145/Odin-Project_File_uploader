@@ -4,7 +4,15 @@
 	<ul>
 		<% items.forEach(element => { %>
 		<li>
-			<a href="#"><%= `${element.name} is ${element.hasOwnProperty("folderId")? "file": "folder"}` %></a>
+			<% if (element.hasOwnProperty("folderId")) { %>
+			<div>
+				<img src="/svg/File.svg" alt="File icon" class="icon">
+				<a href=""><%= element.name %></a>
+			</div>
+			<% } else { %>
+				<img src="/svg/Folder.svg" alt="Folder icon" class="icon">
+				<a href=<%= `/storage/${element.id}` %>><%= element.name %></a>
+			<% } %>
 		</li>
 		<% }); %>
 	</ul>
