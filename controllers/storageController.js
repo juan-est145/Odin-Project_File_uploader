@@ -52,9 +52,15 @@ const postFolder = [
 				uploadPath += `/${folders[i].name}`;
 			await mkdir(uploadPath, { recursive: true });
 			return res.redirect(getOriginalUrl(req));
-		} catch (error) {
-			// Delete the folder from the database if there is an error creating the folder
-			next(error);
+		} catch (errorMkdir) {
+			console.error(errorMkdir);
+			try {
+				await queries.deleteFolder(res.locals.newFolder);
+			} catch (error) {
+				console.error(error);
+				next(error);
+			}
+			next(errorMkdir);
 		}
 	}
 ]

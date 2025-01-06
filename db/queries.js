@@ -93,6 +93,18 @@ async function findRepeatedFolder(name, parentId) {
 	}
 }
 
+async function deleteFolder(folder) {
+	try {
+		await prisma.folder.delete({
+			where: {
+				id: folder.id
+			}
+		});
+	} catch (error) {
+		throw error;
+	}
+}
+
 async function getAllChild(folder) {
 	try {
 		const folders = await prisma.folder.findMany({
@@ -170,6 +182,7 @@ module.exports = {
 	postUser,
 	getFolderId,
 	findRepeatedFolder,
+	deleteFolder,
 	getAllChild,
 	postFile,
 	postFolder,
