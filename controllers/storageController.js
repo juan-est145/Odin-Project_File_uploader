@@ -16,8 +16,7 @@ async function getStorage(req, res, next) {
 }
 
 function postFile(req, res, next) {
-	//TO DO: Redirect to previous folder. Might need to use split
-	return res.redirect("/storage");
+	return res.redirect(getOriginalUrl(req));
 }
 
 const postFolder = [
@@ -29,9 +28,7 @@ const postFolder = [
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			req.flash("valErrors", errors.array());
-			const returnPath = req.originalUrl.split("/");
-			returnPath.pop();
-			return res.status(400).redirect(returnPath.join("/"));
+			return res.status(400).redirect(getOriginalUrl(req));
 		}
 		try {
 			// TO DO: Check for repeated folder names with the same parent folderId.
@@ -50,14 +47,19 @@ const postFolder = [
 			for (let i = folders.length - 1; i > -1; i--) 
 				uploadPath += `/${folders[i].name}`;
 			await mkdir(uploadPath, { recursive: true });
-			let redirectPath = req.params.id ? `/storage/${req.params.id}` : "/storage";
-			return res.redirect(redirectPath);
+			return res.redirect(getOriginalUrl(req));
 		} catch (error) {
 			// Delete the folder from the database if there is an error creating the folder
 			next(error);
 		}
 	}
 ]
+
+function getOriginalUrl(req) {
+	const returnPath = req.originalUrl.split("/");
+	returnPath.pop();
+	return (returnPath.join("/"));
+}
 
 
 module.exports = {
