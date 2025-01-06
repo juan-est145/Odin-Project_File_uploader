@@ -15,7 +15,7 @@ async function getStorage(req, res, next) {
 	}
 }
 
-function postFile(req, res, next) {
+function postFile(req, res) {
 	return res.redirect(getOriginalUrl(req));
 }
 
@@ -31,8 +31,12 @@ const postFolder = [
 			return res.status(400).redirect(getOriginalUrl(req));
 		}
 		try {
-			// TO DO: Check for repeated folder names with the same parent folderId.
 			const parentFolder = await queries.getFolderId(req.params.id, req.user.id);
+			const isFolderPresent = await queries.findRepeatedFolder(req.body.folder, parentFolder.id);
+			if (isFolderPresent) {
+				req.flash("valErrors", [{ msg: "That folder already exists in this path" }]);
+				return res.status(400).redirect(getOriginalUrl(req));
+			}
 			res.locals.newFolder = await queries.postFolder(req.body.folder, parentFolder.id, req.user.id);
 			next();
 		} catch (error) {
@@ -44,7 +48,7 @@ const postFolder = [
 		try {
 			const folders = await queries.getAllParentFolders(res.locals.newFolder);
 			let uploadPath = `./uploads/${req.user.id}`;
-			for (let i = folders.length - 1; i > -1; i--) 
+			for (let i = folders.length - 1; i > -1; i--)
 				uploadPath += `/${folders[i].name}`;
 			await mkdir(uploadPath, { recursive: true });
 			return res.redirect(getOriginalUrl(req));

@@ -73,6 +73,26 @@ async function getFolderId(folderId, userId) {
 	}
 }
 
+async function findRepeatedFolder(name, parentId) {
+	try {
+		const result = prisma.folder.findFirst({
+			where: {
+				name : {
+					equals: name
+				},
+				AND: {
+					parentId: {
+						equals: parentId
+					}
+				}
+			}
+		});
+		return (result);
+	} catch (error) {
+		throw error;
+	}
+}
+
 async function getAllChild(folder) {
 	try {
 		const folders = await prisma.folder.findMany({
@@ -149,6 +169,7 @@ module.exports = {
 	getUser,
 	postUser,
 	getFolderId,
+	findRepeatedFolder,
 	getAllChild,
 	postFile,
 	postFolder,
