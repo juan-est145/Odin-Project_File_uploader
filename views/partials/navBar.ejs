@@ -12,5 +12,8 @@
 	<div>
 		<button id="uploadFolderBtn" class="mainBtn">Add folder</button>
 		<button id="uploadFileBtn" class="mainBtn">Add file</button>
+		<% if (isDeletable) { %>
+			<button id="deleteFolderBtn" class="mainBtn">Delete folder</button>
+		<% } %>
 	</div>
 </nav>

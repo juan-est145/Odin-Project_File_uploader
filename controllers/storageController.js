@@ -13,6 +13,7 @@ async function getStorage(req, res, next) {
 			items: items, 
 			childFolder: parentFolder.parentId === null ? null : parentFolder.id,
 			navBar: routeTree,
+			isDeletable: req.params.id ? true : false,
 		 });
 	} catch (error) {
 		console.error(error);
@@ -60,7 +61,7 @@ const postFolder = [
 		} catch (errorMkdir) {
 			console.error(errorMkdir);
 			try {
-				await queries.deleteFolder(res.locals.newFolder);
+				await queries.deleteFolder(res.locals.newFolder.id, req.user.id);
 			} catch (error) {
 				console.error(error);
 				next(error);
@@ -76,9 +77,24 @@ function getOriginalUrl(req) {
 	return (returnPath.join("/"));
 }
 
+// TO DO: Cascade the delete of a folder and it's files. Also need to delete the local folder in uploads
+async function deleteFolder(req, res, next) {
+	try {
+		if (!req.params.id)
+			return res.redirect(getOriginalUrl(req));
+		const result = await queries.deleteFolder(req.params.id, req.user.id);
+		if (result)
+			return res.json({ message: "Folder deleted successfully" });
+		return res.status(400).json({ message: "Could not deleted folder"});
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+}
 
 module.exports = {
 	getStorage,
 	postFile,
 	postFolder,
+	deleteFolder,
 };

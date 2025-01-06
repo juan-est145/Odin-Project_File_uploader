@@ -13,6 +13,7 @@ storageRouter.use((req, res, next) => {
 storageRouter.get("/(:id)?", controllers.getStorage);
 storageRouter.post("/(:id/)?uploadFile", upload.single("file"), controllers.postFile);
 storageRouter.post("/(:id/)?uploadFolder", controllers.postFolder);
+storageRouter.delete("/:id/deleteFolder", controllers.deleteFolder);
 storageRouter.get("/file/:id", (req, res) => {
 	res.send("This works for now");
 });

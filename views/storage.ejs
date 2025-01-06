@@ -4,7 +4,7 @@
 <body>
 	<script src="/uploads.js" defer></script>
 	<%- include("partials/header") %>
-	<%- include("partials/navBar", { navBar }) %>
+	<%- include("partials/navBar", { navBar, isDeletable }) %>
 	<%- include("partials/itemsList") %>
 	<%- include("partials/errors") %>
 	<%- include("partials/uploadsForm", { route: childFolder }) %>

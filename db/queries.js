@@ -83,13 +83,16 @@ async function findRepeatedFolder(name, parentId) {
 	}
 }
 
-async function deleteFolder(folder) {
+async function deleteFolder(id, userId) {
 	try {
-		await prisma.folder.delete({
+		const result = await prisma.folder.delete({
 			where: {
-				id: folder.id
+				id,
+				userId,
+				parentId: { not: null },
 			}
 		});
+		return (result);
 	} catch (error) {
 		throw error;
 	}
