@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("partials/headTag", { title: "Odin storage", style: "fileView" }) %>
+<body>
+	<%- include("partials/header") %>
+	<ul id="fileDescription">
+		<li>Name: <%= name %></li>
+		<li>Upload time: <%= time %></li>
+		<li>Folder name: <%= parentFolder %></li>
+	</ul>
+	<div>
+		<button class="mainBtn">Download</button>
+		<button class="mainBtn">Delete</button>
+	</div>
+</body>
+</html>

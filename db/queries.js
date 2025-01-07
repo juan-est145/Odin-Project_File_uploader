@@ -186,6 +186,22 @@ async function isFileRepeated(name, folderId, userId) {
 	}
 }
 
+async function getFile(id, userId) {
+	try {
+		const result = prisma.file.findFirst({
+			where: {
+				id,
+				userId
+			},
+			include: {
+				folder: { select: { name: true } }
+			}
+		});
+		return (result);
+	} catch (error) {
+		throw error;
+	}
+}
 
 module.exports = {
 	getUser,
@@ -198,4 +214,5 @@ module.exports = {
 	postFolder,
 	getAllParentFolders,
 	isFileRepeated,
+	getFile,
 }

@@ -109,9 +109,26 @@ function getDeletePath(req, folders) {
 	return (deletePath);
 }
 
+async function getFileView(req, res, next) {
+	try {
+		const file = await queries.getFile(req.params.id, req.user.id);
+		if (!file)
+			return res.redirect("/");
+		return res.render("fileView", {
+			name: file.name,
+			time: file.createdAt,
+			parentFolder: file.folder.name
+		});
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+}
+
 module.exports = {
 	getStorage,
 	postFile,
 	postFolder,
 	deleteFolder,
+	getFileView,
 };
