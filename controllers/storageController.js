@@ -1,6 +1,7 @@
 const queries = require("#db/queries.js");
 const { mkdir } = require("node:fs/promises");
 const { body, validationResult } = require("express-validator");
+const { rm } = require("node:fs");
 
 async function getStorage(req, res, next) {
 	let folderId = req.params.id ? req.params.id : "storage";
@@ -9,12 +10,12 @@ async function getStorage(req, res, next) {
 		const result = await queries.getAllChild(parentFolder);
 		const items = [...result.folders, ...result.files].sort((a, b) => a.name.localeCompare(b.name));
 		const routeTree = await queries.getAllParentFolders(parentFolder);
-		return res.render("storage", { 
-			items: items, 
+		return res.render("storage", {
+			items: items,
 			childFolder: parentFolder.parentId === null ? null : parentFolder.id,
 			navBar: routeTree,
 			isDeletable: req.params.id ? true : false,
-		 });
+		});
 	} catch (error) {
 		console.error(error);
 		next(error);
@@ -77,19 +78,35 @@ function getOriginalUrl(req) {
 	return (returnPath.join("/"));
 }
 
-// TO DO: Cascade the delete of a folder and it's files. Also need to delete the local folder in uploads
 async function deleteFolder(req, res, next) {
 	try {
 		if (!req.params.id)
 			return res.redirect(getOriginalUrl(req));
+		const folders = await queries.getAllParentFolders(await queries.getFolderId(req.params.id, req.user.id));
+		let deletePath = getDeletePath(req, folders);
 		const result = await queries.deleteFolder(req.params.id, req.user.id);
-		if (result)
-			return res.json({ message: "Folder deleted successfully" });
-		return res.status(400).json({ message: "Could not deleted folder"});
+		if (!result)
+			return res.status(400).json({ message: "Could not deleted folder" });
+		rm(deletePath, { recursive: true, force: true }, (error) => {
+			if (error) {
+				console.error(error);
+				return next(error);
+			}
+		});
+		return res.json({ message: "Folder deleted successfully" });
 	} catch (error) {
 		console.error(error);
 		next(error);
 	}
+}
+
+function getDeletePath(req, folders) {
+	let deletePath = `./uploads/${req.user.id}`;
+	for (let i = folders.length - 1; i > -1; i--)
+		deletePath += `/${folders[i].name}`;
+	if (deletePath === `./uploads/${req.user.id}/home` || deletePath === `./uploads/${req.user.id}/home/`)
+		throw new Error("Invalid path to delete");
+	return (deletePath);
 }
 
 module.exports = {

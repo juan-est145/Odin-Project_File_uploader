@@ -30,7 +30,7 @@ model Folder {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   parentId String?
-  parent Folder? @relation("folders", fields: [parentId], references: [id])
+  parent Folder? @relation("folders", fields: [parentId], references: [id], onDelete: Cascade)
   subfolder Folder[] @relation("folders")
   files File[]
 }
@@ -39,9 +39,9 @@ model File {
   id String @id @default(uuid())
   name String
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   folderId String?
-  folder Folder? @relation(fields: [folderId], references: [id])
+  folder Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
