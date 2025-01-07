@@ -136,7 +136,35 @@ async function downloadFile(req, res, next) {
 		const folders = await queries.getAllParentFolders(file.folder);
 		let searchPath = getPath(req, folders, false);
 		const directory = await readdir(searchPath, { withFileTypes: true });
-		let filePath = "";
+		let filePath = localFile.fileDownload(directory, file, searchPath);
+		return (res.download(filePath, file.name));
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+}
+
+async function deleteFile(req, res, next) {
+	try {
+		const file = await queries.getFile(req.params.id, req.user.id);
+		if (!file)
+			return (res.json({ message: "Invalid file", location: "/" }));
+		const folders = await queries.getAllParentFolders(file.folder);
+		let searchPath = getPath(req, folders, false);
+		const directory = await readdir(searchPath, { withFileTypes: true });
+		if (!(await localFile.fileRemoval(directory, file, searchPath)))
+			return (res.json({ message: "Invalid file", location: "/" }));
+		let location = file.folder.parentId ? `/storage/${file.folder.id}` : "/storage";
+		return res.json({ message: "File was deleted successfully", location });
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+}
+
+const localFile = {
+	fileDownload: (directory, file, searchPath) => {
+		let filePath;
 		for (const item of directory) {
 			const match = item.name.match(/(\d+)-(\d+)-(.+)/);
 			if (!match)
@@ -146,11 +174,26 @@ async function downloadFile(req, res, next) {
 				break;
 			}
 		}
-		return (res.download(filePath, file.name));
-	} catch (error) {
-		console.error(error);
-		next(error);
-	}
+		return (filePath);
+	},
+	fileRemoval: async (directory, file, searchPath) => {
+		let filePath = "";
+		for (const item of directory) {
+			const match = item.name.match(/(\d+)-(\d+)-(.+)/);
+			if (!match || match[3] !== file.name)
+				continue;
+			filePath = `./${path.join(searchPath, item.name)}`;
+			rm(filePath, { recursive: true, force: true }, async (fsError) => {
+				if (fsError) {
+					console.error(fsError);
+					next(fsError);
+				}
+				await queries.deleteFile(file.id);
+			});
+			break;
+		}
+		return (filePath);
+	},
 }
 
 module.exports = {
@@ -160,4 +203,5 @@ module.exports = {
 	deleteFolder,
 	getFileView,
 	downloadFile,
+	deleteFile,
 };

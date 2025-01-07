@@ -203,6 +203,19 @@ async function getFile(id, userId) {
 	}
 }
 
+async function deleteFile(id) {
+	try {
+		const result = await prisma.file.delete({
+			where: {
+				id
+			}
+		});
+		return (result);
+	} catch (error) {
+		throw error;
+	}
+}
+
 module.exports = {
 	getUser,
 	postUser,
@@ -215,4 +228,5 @@ module.exports = {
 	getAllParentFolders,
 	isFileRepeated,
 	getFile,
+	deleteFile,
 }
