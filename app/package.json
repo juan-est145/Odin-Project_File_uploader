@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch ./app.js",
-    "migrate": "npx prisma migrate dev --name $npm_config_name"
+    "migrate": "npx prisma migrate dev --name $npm_config_name",
+    "start": "npx prisma migrate deploy && node ./app.js"
   },
   "keywords": [],
   "author": "",

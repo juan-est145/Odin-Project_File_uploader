@@ -11,6 +11,8 @@ const customFields = {
 const strategy = new LocalStrategy((customFields, async (username, password, done) => {
 	try {
 		const user = await queries.getUser({username: username});
+		if (!user)
+			return done(null, false, { message: "Invalid username or password"});
 		const passMatch = await bcrypt.compare(password, user.password);
 		if (!passMatch)
 			return done(null, false, { message: "Invalid username or password"});

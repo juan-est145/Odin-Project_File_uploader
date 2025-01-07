@@ -1,0 +1,52 @@
+services:
+  express:
+    build:
+      context: ./app
+    container_name: express
+    networks:
+      - lan
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - node:/usr/src/app/uploads
+    env_file: .env
+  
+  postgres:
+    container_name: postgres
+    image: postgres:16.6-bookworm
+    restart: always
+    shm_size: 128mb
+    env_file: .env
+    networks:
+      - lan
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+
+networks:
+  lan:
+    driver: bridge
+
+volumes:
+  node:
+    driver: local
+    driver_opts:
+      type: local
+      o: bind
+      device: ./uploads
+  postgres:
+    driver: local
+    driver_opts:
+      type: local
+      o: bind
+      device: ./database
