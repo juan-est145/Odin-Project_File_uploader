@@ -194,7 +194,7 @@ async function getFile(id, userId) {
 				userId
 			},
 			include: {
-				folder: { select: { name: true } }
+				folder: true
 			}
 		});
 		return (result);

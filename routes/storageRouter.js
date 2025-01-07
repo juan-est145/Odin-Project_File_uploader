@@ -15,5 +15,6 @@ storageRouter.post("/(:id/)?uploadFile", upload.single("file"), controllers.post
 storageRouter.post("/(:id/)?uploadFolder", controllers.postFolder);
 storageRouter.delete("/:id/deleteFolder", controllers.deleteFolder);
 storageRouter.get("/file/:id", controllers.getFileView);
+storageRouter.get("/file/:id/download", controllers.downloadFile);
 
 module.exports = storageRouter;

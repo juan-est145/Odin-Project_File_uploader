@@ -1,1 +1,6 @@
 @import url("style.css");
+
+.mainBtn>a {
+	text-decoration: none;
+	color: white;
+}

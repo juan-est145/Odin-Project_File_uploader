@@ -3,14 +3,17 @@
 <%- include("partials/headTag", { title: "Odin storage", style: "fileView" }) %>
 <body>
 	<%- include("partials/header") %>
+	<script src="/scripts/file.js" defer></script>
 	<ul id="fileDescription">
 		<li>Name: <%= name %></li>
 		<li>Upload time: <%= time %></li>
 		<li>Folder name: <%= parentFolder %></li>
 	</ul>
 	<div>
-		<button class="mainBtn">Download</button>
-		<button class="mainBtn">Delete</button>
+		<button class="mainBtn" id="downloadBtn">
+			<a href=<%= `/storage/file/${id}/download` %>>Download</a>
+		</button>
+		<button class="mainBtn" id="deleteBtn">Delete</button>
 	</div>
 </body>
 </html>

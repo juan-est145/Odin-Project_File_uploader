@@ -2,6 +2,8 @@ const queries = require("#db/queries.js");
 const { mkdir } = require("node:fs/promises");
 const { body, validationResult } = require("express-validator");
 const { rm } = require("node:fs");
+const { readdir } = require("node:fs/promises");
+const path = require("node:path");
 
 async function getStorage(req, res, next) {
 	let folderId = req.params.id ? req.params.id : "storage";
@@ -83,7 +85,7 @@ async function deleteFolder(req, res, next) {
 		if (!req.params.id)
 			return res.redirect(getOriginalUrl(req));
 		const folders = await queries.getAllParentFolders(await queries.getFolderId(req.params.id, req.user.id));
-		let deletePath = getDeletePath(req, folders);
+		let deletePath = getPath(req, folders);
 		const result = await queries.deleteFolder(req.params.id, req.user.id);
 		if (!result)
 			return res.status(400).json({ message: "Could not deleted folder" });
@@ -100,11 +102,11 @@ async function deleteFolder(req, res, next) {
 	}
 }
 
-function getDeletePath(req, folders) {
+function getPath(req, folders, toDelete = true) {
 	let deletePath = `./uploads/${req.user.id}`;
 	for (let i = folders.length - 1; i > -1; i--)
 		deletePath += `/${folders[i].name}`;
-	if (deletePath === `./uploads/${req.user.id}/home` || deletePath === `./uploads/${req.user.id}/home/`)
+	if ((deletePath === `./uploads/${req.user.id}/home` || deletePath === `./uploads/${req.user.id}/home/`) && toDelete === true)
 		throw new Error("Invalid path to delete");
 	return (deletePath);
 }
@@ -117,8 +119,34 @@ async function getFileView(req, res, next) {
 		return res.render("fileView", {
 			name: file.name,
 			time: file.createdAt,
-			parentFolder: file.folder.name
+			parentFolder: file.folder.name,
+			id: file.id,
 		});
+	} catch (error) {
+		console.error(error);
+		next(error);
+	}
+}
+
+async function downloadFile(req, res, next) {
+	try {
+		const file = await queries.getFile(req.params.id, req.user.id);
+		if (!file)
+			return (res.redirect("/"));
+		const folders = await queries.getAllParentFolders(file.folder);
+		let searchPath = getPath(req, folders, false);
+		const directory = await readdir(searchPath, { withFileTypes: true });
+		let filePath = "";
+		for (const item of directory) {
+			const match = item.name.match(/(\d+)-(\d+)-(.+)/);
+			if (!match)
+				continue;
+			if (match[3] === file.name) {
+				filePath = `./${path.join(searchPath, item.name)}`;
+				break;
+			}
+		}
+		return (res.download(filePath, file.name));
 	} catch (error) {
 		console.error(error);
 		next(error);
@@ -131,4 +159,5 @@ module.exports = {
 	postFolder,
 	deleteFolder,
 	getFileView,
+	downloadFile,
 };
