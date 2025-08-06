@@ -1,4 +1,4 @@
-# Odin Members Only App
+# Odin File uploader App
 
 A repository containing a website that emulates a cloud storage service. It supports authentication and CRUD operations with files and folders. All of the files are stored locally. In order to run this project, you can do so inside Docker containers or on your own machine. The dependencies for each use case
 will be described below (if you have Docker, I recommend that you chose the container option)
